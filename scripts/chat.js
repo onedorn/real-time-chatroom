@@ -24,12 +24,14 @@ class Chatroom {
     }
     getChats(callback){
         this.chats
-          .onSnapshot(snapshot => {
-            snapshot.docChanges().forEach(change => {
-                if(change.type === 'added'){
-                    callback(change.doc.data());
-                }
-            });
+            .where('room', '==', this.room)
+            .orderBy('created_at')
+            .onSnapshot(snapshot => {
+                snapshot.docChanges().forEach(change => {
+                    if(change.type === 'added'){
+                        callback(change.doc.data());
+                    }
+                });
         });
     }
 }
